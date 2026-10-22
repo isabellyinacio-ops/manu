@@ -7,7 +7,7 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 
 const db = mysql.createPool({
     host: 'localhost',
@@ -121,7 +121,7 @@ function verificarSenhaWerkzeug(senha, hash) {
                 N: N,
                 r: r,
                 p: p,
-                maxmem: 128 * N * r + 1024
+                maxmem: 64 * 1024 * 1024
             }
         );
 
@@ -154,95 +154,84 @@ app.get('/api', (req, res) => {
 
 
 
+
 app.post('/api/login', async (req, res) => {
+    console.log('Corpo recebido:', {
+        email: req.body?.email,
+        camposRecebidos: Object.keys(req.body || {}),
+        tipoSenha: typeof req.body?.senha
+    });
 
-    const {
-        email,
-        password
-    } = req.body;
+    const { email, senha } = req.body || {};
 
-    if (!email || !password) {
-
+    // Validar os campos recebidos
+    if (
+        typeof email !== 'string' ||
+        typeof senha !== 'string' ||
+        !email.trim() ||
+        !senha
+    ) {
         return res.status(400).json({
             success: false,
-            message: 'Preencha e-mail e senha.'
+            message: 'Preencha e-mail e senha.',
+            camposRecebidos: Object.keys(req.body || {})
         });
-
     }
 
     try {
-
+        // Buscar usuário pelo e-mail
         const [rows] = await db.query(
             `
-            SELECT
-                id,
-                usuario,
-                email,
-                senha
+            SELECT id, usuario, email, senha
             FROM usuarios
             WHERE email = ?
             `,
             [email.trim()]
         );
 
+        // Verificar se o usuário existe
         if (rows.length === 0) {
-
             return res.status(401).json({
                 success: false,
                 message: 'E-mail ou senha incorretos.'
             });
-
         }
 
         const usuario = rows[0];
 
-        const senhaCorreta =
-            verificarSenhaWerkzeug(
-                password,
-                usuario.senha
-            );
+        // Verificar a senha armazenada no formato do Werkzeug
+        const senhaCorreta = verificarSenhaWerkzeug(
+            senha,
+            usuario.senha
+        );
 
         if (!senhaCorreta) {
-
             return res.status(401).json({
                 success: false,
                 message: 'E-mail ou senha incorretos.'
             });
-
         }
 
-        return res.json({
-
+        // Login realizado
+        return res.status(200).json({
             success: true,
-
             message: 'Login realizado com sucesso!',
-
             user: {
                 id: usuario.id,
                 usuario: usuario.usuario,
                 email: usuario.email
             }
-
         });
 
     } catch (error) {
-
-        console.log(
-            'ERRO NO LOGIN:',
-            error
-        );
+        console.error('ERRO NO LOGIN:', error.message);
 
         return res.status(500).json({
             success: false,
-            message: 'Erro ao realizar login.',
-            error: error.message
+            message: 'Erro ao realizar login.'
         });
-
     }
-
 });
-
-
 
 app.get(
     '/api/dashboard/:usuarioId',
