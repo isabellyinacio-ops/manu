@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+```
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>Entrada | IC Agrícola</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='dashboard.css') }}">
+
+<style>
+
+    .area-formulario {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(13, 77, 44, 0.06);
+        max-width: 850px;
+    }
+
+    .cabecalho-formulario {
+        margin-bottom: 25px;
+    }
+
+    .cabecalho-formulario h2 {
+        color: #0d4d2c;
+        font-size: 21px;
+    }
+
+    .cabecalho-formulario p {
+        color: #819587;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .mensagem {
+        padding: 13px 16px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        background: #e0f4e7;
+        color: #218044;
+        font-size: 13px;
+    }
+
+    .campo {
+        margin-bottom: 21px;
+    }
+
+    .campo label {
+        display: block;
+        color: #405b49;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .campo select,
+    .campo input {
+        width: 100%;
+        padding: 13px 14px;
+        border: 1px solid #d5e1d9;
+        border-radius: 10px;
+        background: white;
+        color: #405b49;
+        font-family: inherit;
+        font-size: 13px;
+        outline: none;
+        transition: 0.2s;
+    }
+
+    .campo select:focus,
+    .campo input:focus {
+        border-color: #146c43;
+        box-shadow: 0 0 0 3px rgba(20, 108, 67, 0.08);
+    }
+
+    .botao-registrar {
+        width: 100%;
+        border: none;
+        border-radius: 10px;
+        padding: 13px;
+        background: #0d4d2c;
+        color: white;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.25s;
+    }
+
+    .botao-registrar:hover {
+        background: #146c43;
+    }
+
+    .sem-produtos {
+        background: #fff0f0;
+        color: #b32626;
+        border-radius: 10px;
+        padding: 15px;
+        font-size: 13px;
+    }
+
+    .botao-voltar {
+        display: inline-block;
+        margin-top: 18px;
+        background: #e8f3ec;
+        color: #0d4d2c;
+        text-decoration: none;
+        padding: 10px 15px;
+        border-radius: 9px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .botao-voltar:hover {
+        background: #d8ebdf;
+    }
+
+    @media (max-width: 800px) {
+
+        .area-formulario {
+            padding: 20px;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+```
+{% include "partials/notificacoes.html" %}
+
+<button class="botao-menu" id="botaoMenu">☰</button>
+
+<aside class="menu-lateral" id="menuLateral">
+
+    <div class="logo-menu">
+
+        <img src="{{ url_for('static', filename='ICBRANCO.png') }}"
+             alt="Logo IC Agrícola">
+
+        <h2>IC Agrícola</h2>
+
+    </div>
+
+    <nav class="links-menu">
+
+        <a href="{{ url_for('dashboard') }}" class="link-menu">
+            <span>▣</span>
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('produtos') }}" class="link-menu">
+            <span>▤</span>
+            Produtos
+        </a>
+
+        <a href="{{ url_for('categorias') }}" class="link-menu ativo">
+            <span>▥</span>
+            Categorias
+        </a>
+
+        <a href="{{ url_for('entrada') }}" class="link-menu ativo">
+            <span>↙</span>
+            Entrada
+        </a>
+
+        <a href="{{ url_for('saida') }}" class="link-menu">
+            <span>↗</span>
+            Saída
+        </a>
+
+        <a href="{{ url_for('movimentacao') }}" class="link-menu">
+            <span>↔</span>
+            Movimentações
+        </a>
+
+        <a href="{{ url_for('notificacoes') }}" class="link-menu">
+            <span>🕭</span>
+            Notificações
+        </a>
+
+    </nav>
+
+    <div class="perfil-menu">
+
+        <button class="botao-perfil" id="botaoPerfil">
+
+            <div class="avatar-perfil">
+                {{ (session.get('usuario') or 'U')[0]|upper }}
+            </div>
+
+            <div class="dados-perfil">
+
+                <strong>
+                    {{ session.get('usuario', 'Usuário') }}
+                </strong>
+
+                <small>Meu perfil</small>
+
+            </div>
+
+            <span class="seta-perfil">⌃</span>
+
+        </button>
+
+        <div class="opcoes-perfil" id="opcoesPerfil">
+
+            <a href="{{ url_for('perfil') }}"
+               class="opcao-perfil">
+                <span>👤</span>
+                Editar perfil
+            </a>
+
+            <button type="button"
+                    class="opcao-perfil"
+                    id="botaoAcessibilidade">
+                <span>⚙</span>
+                Acessibilidade
+            </button>
+
+            <a href="{{ url_for('logout') }}"
+               class="opcao-perfil sair">
+                <span>↪</span>
+                Sair
+            </a>
+
+        </div>
+
+    </div>
+
+</aside>
+
+<main class="conteudo-principal">
+
+    <header class="cabecalho">
+
+        <div>
+
+            <p class="texto-pequeno">
+                Movimentação de estoque
+            </p>
+
+            <h1>Entrada</h1>
+
+            <p class="subtitulo">
+                Registre a entrada de produtos no estoque.
+            </p>
+
+        </div>
+
+        <div class="data-atual">
+
+            <span>📅</span>
+
+            <span id="dataAtual"></span>
+
+        </div>
+
+    </header>
+
+
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+
+        {% if mensagens %}
+
+            {% for categoria, mensagem in mensagens %}
+
+                <div class="mensagem">
+                    {{ mensagem }}
+                </div>
+
+            {% endfor %}
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <section class="area-formulario">
+
+        <div class="cabecalho-formulario">
+
+            <h2>Registrar entrada de estoque</h2>
+
+            <p>
+                Selecione o produto e informe a quantidade recebida.
+            </p>
+
+        </div>
+
+
+        {% if produtos %}
+
+            <form
+                action="{{ url_for('registrar_entrada') }}"
+                method="POST"
+            >
+
+                <div class="campo">
+
+                    <label for="produto">
+                        Produto
+                    </label>
+
+                    <select
+                        id="produto"
+                        name="produto"
+                        required
+                    >
+
+                        <option value="">
+                            Selecione um produto
+                        </option>
+
+                        {% for produto in produtos %}
+
+                            <option value="{{ produto.id }}">
+
+                                {{ produto.nome }}
+                                — estoque atual:
+                                {{ produto.quantidade }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="quantidade">
+                        Quantidade de entrada
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quantidade"
+                        name="quantidade"
+                        min="1"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="botao-registrar"
+                >
+                    Registrar entrada
+                </button>
+
+            </form>
+
+        {% else %}
+
+            <p class="sem-produtos">
+                Cadastre um produto antes de registrar uma entrada.
+            </p>
+
+            <a href="{{ url_for('produtos') }}"
+               class="botao-voltar">
+                Ir para produtos
+            </a>
+
+        {% endif %}
+
+    </section>
+
+</main>
+
+
+<div class="modal-acessibilidade"
+     id="modalAcessibilidade">
+
+    <div class="conteudo-acessibilidade">
+
+        <button
+            class="fechar-acessibilidade"
+            id="fecharAcessibilidade">
+            ×
+        </button>
+
+        <h2>Acessibilidade</h2>
+
+        <p>
+            Personalize a visualização do sistema.
+        </p>
+
+        <div class="opcoes-acessibilidade">
+
+            <button id="aumentarFonte">
+                A+ Aumentar fonte
+            </button>
+
+            <button id="diminuirFonte">
+                A− Diminuir fonte
+            </button>
+
+            <button id="alternarContraste">
+                ◐ Alto contraste
+            </button>
+
+            <button id="destacarLinks">
+                🔗 Destacar links
+            </button>
+
+            <button id="restaurarAcessibilidade">
+                ↺ Restaurar padrão
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const botaoMenu =
+        document.getElementById("botaoMenu");
+
+    const menuLateral =
+        document.getElementById("menuLateral");
+
+    botaoMenu.addEventListener("click", function () {
+        menuLateral.classList.toggle("aberto");
+    });
+
+
+    const botaoPerfil =
+        document.getElementById("botaoPerfil");
+
+    const opcoesPerfil =
+        document.getElementById("opcoesPerfil");
+
+    botaoPerfil.addEventListener("click", function () {
+        opcoesPerfil.classList.toggle("aberto");
+    });
+
+
+    const botaoAcessibilidade =
+        document.getElementById("botaoAcessibilidade");
+
+    const modalAcessibilidade =
+        document.getElementById("modalAcessibilidade");
+
+    const fecharAcessibilidade =
+        document.getElementById("fecharAcessibilidade");
+
+
+    botaoAcessibilidade.addEventListener("click", function () {
+        modalAcessibilidade.classList.add("aberto");
+    });
+
+
+    fecharAcessibilidade.addEventListener("click", function () {
+        modalAcessibilidade.classList.remove("aberto");
+    });
+
+
+    document.getElementById("aumentarFonte")
+        .addEventListener("click", function () {
+            document.body.classList.add("fonte-grande");
+        });
+
+
+    document.getElementById("diminuirFonte")
+        .addEventListener("click", function () {
+            document.body.classList.remove("fonte-grande");
+        });
+
+
+    document.getElementById("alternarContraste")
+        .addEventListener("click", function () {
+            document.body.classList.toggle("alto-contraste");
+        });
+
+
+    document.getElementById("destacarLinks")
+        .addEventListener("click", function () {
+            document.body.classList.toggle("links-destacados");
+        });
+
+
+    document.getElementById("restaurarAcessibilidade")
+        .addEventListener("click", function () {
+
+            document.body.classList.remove(
+                "fonte-grande",
+                "alto-contraste",
+                "links-destacados"
+            );
+
+        });
+
+
+    const data = new Date();
+
+    document.getElementById("dataAtual").textContent =
+        data.toLocaleDateString("pt-BR", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+
+</script>
+```
+
+</body>
+
+</html>

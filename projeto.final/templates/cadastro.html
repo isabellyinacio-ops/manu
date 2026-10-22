@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Cadastro | IC Agrícola</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='cadastro.css') }}">
+</head>
+
+<body class="bg">
+
+<div class="overlay"></div>
+
+<div class="card">
+
+    <div class="left">
+
+        <h2>BEM VINDO(A)</h2>
+
+        <p>
+            <strong>Inventory Control Agrícola</strong>
+        </p>
+
+        <a href="{{ url_for('login') }}">
+            <button
+                class="btn-light"
+                type="button">
+                Já tenho conta
+            </button>
+        </a>
+
+    </div>
+
+    <div class="right">
+
+        <h3>FAÇA CADASTRO</h3>
+
+        <!-- MENSAGENS DO FLASK -->
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% if mensagens %}
+                {% for categoria, mensagem in mensagens %}
+                    <div class="mensagem-{{ categoria }}">
+                        {{ mensagem }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- MENSAGEM DE ERRO ANTIGA, CASO EXISTA -->
+        {% if erro %}
+            <div class="mensagem-erro">
+                {{ erro }}
+            </div>
+        {% endif %}
+
+        <form
+            action="{{ url_for('cadastrar') }}"
+            method="POST"
+        >
+
+            <input
+                type="text"
+                name="usuario"
+                placeholder="Usuário"
+                required
+            >
+
+            <input
+                type="email"
+                name="email"
+                placeholder="E-mail"
+                required
+            >
+
+            <input
+                type="password"
+                name="senha"
+                placeholder="Senha"
+                required
+            >
+
+            <input
+                type="password"
+                name="confirmacao"
+                placeholder="Confirmar senha"
+                required
+            >
+
+            <button
+                class="btn-main"
+                type="submit">
+                Cadastrar
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+</html>

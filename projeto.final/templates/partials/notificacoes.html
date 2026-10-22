@@ -1,0 +1,104 @@
+<div class="notificacoes-container">
+
+<a
+    href="{{ url_for('notificacoes') }}"
+    class="botao-notificacao"
+    title="Notificações">
+
+    🕭
+
+    {% if contador_notificacoes > 0 %}
+
+        <span class="contador-notificacao">
+            {{ contador_notificacoes }}
+        </span>
+
+    {% endif %}
+
+</a>
+
+
+</div>
+
+<style>
+
+    .notificacoes-container {
+        position: fixed;
+
+        top: 25px;
+        right: 42px;
+
+        z-index: 1000;
+    }
+
+    .botao-notificacao {
+        position: relative;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        width: 42px;
+        height: 42px;
+
+        color: #0d4d2c;
+
+        background: white;
+
+        text-decoration: none;
+
+        font-size: 21px;
+
+        border-radius: 50%;
+
+        box-shadow:
+            0 3px 12px rgba(0, 0, 0, 0.08);
+
+        transition: 0.2s;
+    }
+
+    .botao-notificacao:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 5px 15px rgba(0, 0, 0, 0.12);
+    }
+
+    .contador-notificacao {
+        position: absolute;
+
+        top: -4px;
+        right: -4px;
+
+        min-width: 19px;
+        height: 19px;
+
+        padding: 2px 5px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        background-color: #e53935;
+
+        color: white;
+
+        border-radius: 50%;
+
+        font-size: 11px;
+
+        font-weight: bold;
+    }
+
+    @media (max-width: 800px) {
+
+        .notificacoes-container {
+            top: 15px;
+            right: 65px;
+        }
+
+    }
+
+</style>

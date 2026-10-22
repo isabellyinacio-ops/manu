@@ -1,0 +1,192 @@
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .logo-area img {
+    width: 110px;
+  }
+  
+  .logo {
+    font-size: 23px;
+    font-weight: bold;
+  }
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    height: 100vh;
+    background: 
+    linear-gradient(rgba(167, 154, 154, 0), rgba(4, 62, 8, 0.068)),
+    url("/static/TELAINICIO.png") no-repeat center;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 900px;
+    height: 500px;
+    display: flex ;
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.15);
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    
+}
+
+.left {
+    flex: 1;
+    padding: 40px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.left h1 {
+    font-weight: 300;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    color: #e6ffe7;
+}
+
+.left h2 {
+    font-size: 28px;
+    margin-bottom: 30px;
+    color: #c7ffcb;
+}
+
+.left h2 span {
+    text-decoration: underline;
+}
+
+.btn-outline {
+    width: 150px;
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+    background: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    margin-bottom: 30px;
+}
+
+.social i {
+    font-size: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+.divider {
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.divider i {
+    background: #fff;
+    padding: 10px;
+    border-radius: 50%;
+}
+
+.right {
+    flex: 1;
+    padding: 100px;
+    position: relative;
+    color: #fff;
+}
+
+.top-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: none;
+    background: rgba(155, 199, 167, 0.6);
+    cursor: pointer;
+}
+
+.right h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    letter-spacing: 3px;
+}
+
+.input-box {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.6);
+    padding: 10px;
+    border-radius: 20px;
+    margin-bottom: 15px;
+}
+
+.input-box i {
+    margin-right: 10px;
+    color: #ffffff;
+}
+
+.input-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.options a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 20px;
+    border: none;
+    background: #2e7d32;
+    color: #fff;
+    cursor: pointer;
+    margin-bottom: 20px;
+    transition: 0.3s;
+}
+
+.btn:hover {
+    background: #2dbf36;
+}
+
+.bottom {
+    text-align: center;
+}
+
+.bottom i {
+    margin: 0 5px;
+}
+
+@media (max-width: 900px) {
+    .container {
+        flex-direction: column;
+        height: auto;
+        width: 90%;
+    }
+
+    .divider {
+        display: none;
+    }
+}

@@ -1,0 +1,152 @@
+<div class="acessibilidade-area">
+
+    <button
+        type="button"
+        class="acessibilidade-btn"
+        onclick="abrirAcessibilidade()"
+        aria-label="Abrir opções de acessibilidade"
+    >
+        ♿
+        <span>Acessibilidade</span>
+    </button>
+
+    <div
+        id="painelAcessibilidade"
+        class="painel-acessibilidade"
+        aria-label="Opções de acessibilidade"
+    >
+
+        <div class="acessibilidade-topo">
+
+            <h2>Acessibilidade</h2>
+
+            <button
+                type="button"
+                onclick="fecharAcessibilidade()"
+                aria-label="Fechar opções de acessibilidade"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div class="acessibilidade-opcoes">
+
+            <button
+                type="button"
+                onclick="aumentarFonte()"
+            >
+                🔠 Aumentar fonte
+            </button>
+
+            <button
+                type="button"
+                onclick="diminuirFonte()"
+            >
+                🔡 Diminuir fonte
+            </button>
+
+            <button
+                type="button"
+                onclick="alternarContraste()"
+            >
+                ◐ Alto contraste
+            </button>
+
+            <button
+                type="button"
+                onclick="destacarLinks()"
+            >
+                🔗 Destacar links
+            </button>
+
+            <button
+                type="button"
+                onclick="restaurarAcessibilidade()"
+            >
+                ↺ Restaurar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+let tamanhoFonte = 100;
+
+function abrirAcessibilidade() {
+
+    document
+        .getElementById("painelAcessibilidade")
+        .classList.add("aberto");
+}
+
+
+function fecharAcessibilidade() {
+
+    document
+        .getElementById("painelAcessibilidade")
+        .classList.remove("aberto");
+}
+
+
+function aumentarFonte() {
+
+    if (tamanhoFonte < 150) {
+
+        tamanhoFonte += 10;
+
+        document.documentElement.style.fontSize =
+            tamanhoFonte + "%";
+    }
+}
+
+
+function diminuirFonte() {
+
+    if (tamanhoFonte > 80) {
+
+        tamanhoFonte -= 10;
+
+        document.documentElement.style.fontSize =
+            tamanhoFonte + "%";
+    }
+}
+
+
+function alternarContraste() {
+
+    document.body.classList.toggle(
+        "alto-contraste"
+    );
+}
+
+
+function destacarLinks() {
+
+    document.body.classList.toggle(
+        "destacar-links"
+    );
+}
+
+
+function restaurarAcessibilidade() {
+
+    tamanhoFonte = 100;
+
+    document.documentElement.style.fontSize = "100%";
+
+    document.body.classList.remove(
+        "alto-contraste"
+    );
+
+    document.body.classList.remove(
+        "destacar-links"
+    );
+}
+
+</script>

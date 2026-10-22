@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | IC Agrícola</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+
+<body>
+
+    {% include "partials/notificacoes.html" %}
+
+    <button class="botao-menu" id="botaoMenu">☰</button>
+
+    <aside class="menu-lateral" id="menuLateral">
+
+        <div class="logo-menu">
+            <img src="{{ url_for('static', filename='ICBRANCO.png') }}"
+                 alt="Logo IC Agrícola">
+
+            <h2>IC Agrícola</h2>
+        </div>
+
+        <nav class="links-menu">
+
+            <a href="{{ url_for('dashboard') }}" class="link-menu ativo">
+                <span>▣</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('produtos') }}" class="link-menu">
+                <span>▤</span>
+                Produtos
+            </a>
+
+            <a href="{{ url_for('categorias') }}" class="link-menu ativo">
+                <span>▥</span>
+                Categorias
+            </a>
+
+            <a href="{{ url_for('entrada') }}" class="link-menu">
+                <span>↙</span>
+                Entrada
+            </a>
+
+            <a href="{{ url_for('saida') }}" class="link-menu">
+                <span>↗</span>
+                Saída
+            </a>
+
+            <a href="{{ url_for('movimentacao') }}" class="link-menu">
+                <span>↔</span>
+                Movimentações
+            </a>
+
+            <a href="{{ url_for('notificacoes') }}" class="link-menu">
+                <span>🕭</span>
+                Notificações
+            </a>
+
+        </nav>
+
+        <div class="perfil-menu">
+
+            <button class="botao-perfil" id="botaoPerfil">
+
+                <div class="avatar-perfil">
+                    {{ (session.get('usuario') or 'U')[0]|upper }}
+                </div>
+
+                <div class="dados-perfil">
+                    <strong>{{ session.get('usuario', 'Usuário') }}</strong>
+                    <small>Meu perfil</small>
+                </div>
+
+                <span class="seta-perfil">⌃</span>
+
+            </button>
+
+            <div class="opcoes-perfil" id="opcoesPerfil">
+
+                <a href="{{ url_for('perfil') }}" class="opcao-perfil">
+                    <span>👤</span>
+                    Editar perfil
+                </a>
+
+                <button type="button"
+                        class="opcao-perfil"
+                        id="botaoAcessibilidade">
+                    <span>⚙</span>
+                    Acessibilidade
+                </button>
+
+                <a href="{{ url_for('logout') }}"
+                   class="opcao-perfil sair">
+                    <span>↪</span>
+                    Sair
+                </a>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+    <main class="conteudo-principal">
+
+        <header class="cabecalho">
+
+            <div>
+                <p class="texto-pequeno">Visão geral</p>
+                <h1>Dashboard</h1>
+                <p class="subtitulo">
+                    Acompanhe o estoque e as movimentações da sua empresa.
+                </p>
+            </div>
+
+            <div class="data-atual">
+                <span>📅</span>
+                {{ data_atual }}
+            </div>
+
+        </header>
+
+        <section class="cards-dashboard">
+
+            <div class="card-dashboard">
+                <div class="icone-card verde">▤</div>
+                <div>
+                    <p>Total de produtos</p>
+                    <h2>{{ total_produtos }}</h2>
+                </div>
+            </div>
+
+            <div class="card-dashboard">
+                <div class="icone-card azul">▦</div>
+                <div>
+                    <p>Quantidade em estoque</p>
+                    <h2>{{ total_quantidade }}</h2>
+                </div>
+            </div>
+
+            <div class="card-dashboard">
+                <div class="icone-card amarelo">R$</div>
+                <div>
+                    <p>Valor total</p>
+                    <h2>R$ {{ "%.2f"|format(valor_total) }}</h2>
+                </div>
+            </div>
+
+            <div class="card-dashboard">
+                <div class="icone-card vermelho">!</div>
+                <div>
+                    <p>Estoque baixo</p>
+                    <h2>{{ estoque_baixo }}</h2>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="area-conteudo">
+
+            <div class="cabecalho-secao">
+                <div>
+                    <h2>Produtos cadastrados</h2>
+                    <p>Visualize os produtos disponíveis no estoque.</p>
+                </div>
+
+                <a href="{{ url_for('produtos') }}" class="botao-ver-todos">
+                    Ver todos
+                </a>
+            </div>
+
+            <div class="tabela-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço unitário</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for produto in produtos %}
+
+                        <tr>
+                            <td>{{ produto.nome }}</td>
+
+                            <td>{{ produto.quantidade }}</td>
+
+                            <td>
+                                R$ {{ "%.2f"|format(produto.preco_unitario) }}
+                            </td>
+
+                            <td>
+                                {% if produto.quantidade <= 10 %}
+                                    <span class="status baixo">
+                                        Estoque baixo
+                                    </span>
+                                {% else %}
+                                    <span class="status normal">
+                                        Normal
+                                    </span>
+                                {% endif %}
+                            </td>
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="4" class="sem-produtos">
+                                Nenhum produto cadastrado.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <div class="modal-acessibilidade" id="modalAcessibilidade">
+
+        <div class="conteudo-acessibilidade">
+
+            <button class="fechar-acessibilidade"
+                    id="fecharAcessibilidade">
+                ×
+            </button>
+
+            <h2>Acessibilidade</h2>
+
+            <p>Personalize a visualização do sistema.</p>
+
+            <div class="opcoes-acessibilidade">
+
+                <button id="aumentarFonte">
+                    A+ Aumentar fonte
+                </button>
+
+                <button id="diminuirFonte">
+                    A− Diminuir fonte
+                </button>
+
+                <button id="alternarContraste">
+                    ◐ Alto contraste
+                </button>
+
+                <button id="destacarLinks">
+                    🔗 Destacar links
+                </button>
+
+                <button id="restaurarAcessibilidade">
+                    ↺ Restaurar padrão
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const botaoMenu = document.getElementById("botaoMenu");
+        const menuLateral = document.getElementById("menuLateral");
+
+        botaoMenu.addEventListener("click", function () {
+            menuLateral.classList.toggle("aberto");
+        });
+
+        const botaoPerfil = document.getElementById("botaoPerfil");
+        const opcoesPerfil = document.getElementById("opcoesPerfil");
+
+        botaoPerfil.addEventListener("click", function () {
+            opcoesPerfil.classList.toggle("aberto");
+        });
+
+        const botaoAcessibilidade =
+            document.getElementById("botaoAcessibilidade");
+
+        const modalAcessibilidade =
+            document.getElementById("modalAcessibilidade");
+
+        const fecharAcessibilidade =
+            document.getElementById("fecharAcessibilidade");
+
+        botaoAcessibilidade.addEventListener("click", function () {
+            modalAcessibilidade.classList.add("aberto");
+        });
+
+        fecharAcessibilidade.addEventListener("click", function () {
+            modalAcessibilidade.classList.remove("aberto");
+        });
+
+        document.getElementById("aumentarFonte")
+            .addEventListener("click", function () {
+                document.body.classList.add("fonte-grande");
+            });
+
+        document.getElementById("diminuirFonte")
+            .addEventListener("click", function () {
+                document.body.classList.remove("fonte-grande");
+            });
+
+        document.getElementById("alternarContraste")
+            .addEventListener("click", function () {
+                document.body.classList.toggle("alto-contraste");
+            });
+
+        document.getElementById("destacarLinks")
+            .addEventListener("click", function () {
+                document.body.classList.toggle("links-destacados");
+            });
+
+        document.getElementById("restaurarAcessibilidade")
+            .addEventListener("click", function () {
+                document.body.classList.remove(
+                    "fonte-grande",
+                    "alto-contraste",
+                    "links-destacados"
+                );
+            });
+
+    </script>
+
+</body>
+</html>

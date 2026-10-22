@@ -1,0 +1,225 @@
+.erro-body {
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Arial, Helvetica, sans-serif;
+    background:
+        radial-gradient(
+            circle at 15% 20%,
+            rgba(34, 197, 94, 0.18),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(22, 101, 52, 0.16),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #b5ffd4,
+            #d1fcbc,
+            #3fd54c
+        );
+    overflow: hidden;
+}
+
+.erro-body::before,
+.erro-body::after {
+    content: "";
+    position: fixed;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.erro-body::before {
+    width: 260px;
+    height: 260px;
+    top: -100px;
+    left: -100px;
+    background: rgba(34, 197, 94, 0.12);
+    filter: blur(5px);
+}
+
+.erro-body::after {
+    width: 320px;
+    height: 320px;
+    right: -130px;
+    bottom: -130px;
+    background: rgba(21, 128, 61, 0.10);
+    filter: blur(5px);
+}
+
+.erro-container {
+    position: relative;
+    z-index: 1;
+    width: 90%;
+    max-width: 550px;
+    padding: 55px 45px;
+    text-align: center;
+    background: rgba(222, 255, 213, 0.88);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(34, 197, 94, 0.15);
+    border-radius: 28px;
+    box-shadow:
+        0 25px 60px rgba(22, 101, 52, 0.15),
+        0 5px 15px rgba(0, 0, 0, 0.05);
+    animation: aparecer 0.7s ease-out;
+}
+
+
+/* DECORAÇÃO SUPERIOR */
+.erro-container::before {
+    content: "🌱";
+    display: block;
+    font-size: 38px;
+    margin-bottom: 12px;
+    animation: planta 3s ease-in-out infinite;
+}
+
+
+/* NÚMERO DO ERRO */
+.erro-numero {
+    font-size: 110px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -5px;
+    margin-bottom: 20px;
+    background: linear-gradient(
+        135deg,
+        #166534,
+        #16a34a,
+        #4d7c0f
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow:
+        0 10px 30px rgba(22, 101, 52, 0.18);
+    animation: flutuar 3s ease-in-out infinite;
+}
+
+
+/* TÍTULO */
+.erro-container h1 {
+    font-size: 30px;
+    font-weight: 700;
+    color: #1f3d2b;
+    margin: 0 0 15px;
+    letter-spacing: -0.5px;
+}
+
+
+/* TEXTO */
+.erro-container p {
+    max-width: 450px;
+    margin: 0 auto 32px;
+    font-size: 16px;
+    color: #64756a;
+    line-height: 1.7;
+}
+
+
+/* BOTÃO */
+.erro-botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 30px;
+    background: linear-gradient(
+        135deg,
+        #15803d,
+        #16a34a
+    );
+
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    box-shadow:
+        0 8px 20px rgba(21, 128, 61, 0.28);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+
+/* HOVER DO BOTÃO */
+.erro-botao:hover {
+    transform: translateY(-4px);
+    filter: brightness(1.08);
+    box-shadow:
+        0 14px 28px rgba(21, 128, 61, 0.35);
+}
+
+
+/* CLIQUE */
+.erro-botao:active {
+    transform: translateY(-1px);
+}
+
+
+/* ANIMAÇÃO DO CARD */
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(25px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+
+/* ANIMAÇÃO DO NÚMERO */
+@keyframes flutuar {
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes planta {
+    0%,
+    100% {
+        transform: rotate(-3deg) translateY(0);
+    }
+
+    50% {
+        transform: rotate(3deg) translateY(-5px);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .erro-container {
+        padding: 45px 25px;
+        border-radius: 22px;
+    }
+
+    .erro-numero {
+        font-size: 80px;
+    }
+
+    .erro-container h1 {
+        font-size: 25px;
+    }
+
+    .erro-container p {
+        font-size: 15px;
+    }
+
+    .erro-container::before {
+        font-size: 32px;
+    }
+}

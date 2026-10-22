@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Meu Perfil | IC Agrícola</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='perfil.css') }}">
+</head>
+
+<body>
+
+    <main class="pagina-perfil">
+
+        <a href="{{ url_for('dashboard') }}" class="voltar">
+            ← Voltar para o dashboard
+        </a>
+
+        <section class="card-perfil">
+
+            <div class="cabecalho-perfil">
+                <div class="avatar-grande">
+                    {{ (session.get('usuario') or 'U')[0]|upper }}
+                </div>
+
+                <div>
+                    <h1>Meu perfil</h1>
+                    <p>Atualize suas informações de acesso.</p>
+                </div>
+            </div>
+
+            {% with mensagens = get_flashed_messages(with_categories=true) %}
+                {% if mensagens %}
+                    {% for categoria, mensagem in mensagens %}
+                        <div class="mensagem {{ categoria }}">
+                            {{ mensagem }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST"
+                  action="{{ url_for('perfil') }}">
+
+                <label for="usuario">Nome de usuário</label>
+                <input type="text"
+                       id="usuario"
+                       name="usuario"
+                       value="{{ usuario.usuario }}"
+                       required>
+
+                <label for="email">E-mail</label>
+                <input type="email"
+                       id="email"
+                       name="email"
+                       value="{{ usuario.email }}"
+                       required>
+
+                <label for="senha">Nova senha</label>
+                <input type="password"
+                       id="senha"
+                       name="senha"
+                       placeholder="Digite uma nova senha">
+
+                <label for="confirmacao">Confirmar nova senha</label>
+                <input type="password"
+                       id="confirmacao"
+                       name="confirmacao"
+                       placeholder="Repita a nova senha">
+
+                <button type="submit">
+                    Salvar alterações
+                </button>
+
+            </form>
+
+        </section>
+
+    </main>
+
+</body>
+</html>

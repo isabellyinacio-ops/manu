@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+```
+<title>Produtos | IC Agrícola</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='dashboard.css') }}">
+
+<style>
+
+    .botao-novo {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        padding: 11px 18px;
+
+        background: #0d4d2c;
+        color: white;
+
+        border-radius: 10px;
+
+        text-decoration: none;
+
+        font-weight: 600;
+
+        transition: 0.2s;
+    }
+
+    .botao-novo:hover {
+        background: #146c43;
+        transform: translateY(-1px);
+    }
+
+    .tabela-produtos {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .tabela-produtos th {
+        padding: 15px;
+        text-align: left;
+
+        background: #f3f7f4;
+
+        color: #31503f;
+
+        font-size: 14px;
+    }
+
+    .tabela-produtos td {
+        padding: 15px;
+
+        border-top: 1px solid #edf1ee;
+
+        color: #34443a;
+
+        font-size: 14px;
+    }
+
+    .tabela-produtos tr:hover td {
+        background: #fafcfb;
+    }
+
+    .acoes-produto {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .botao-editar,
+    .botao-excluir {
+        border: none;
+
+        padding: 8px 12px;
+
+        border-radius: 8px;
+
+        text-decoration: none;
+
+        cursor: pointer;
+
+        font-size: 13px;
+
+        font-weight: 600;
+    }
+
+    .botao-editar {
+        background: #e7f1eb;
+        color: #0d4d2c;
+    }
+
+    .botao-editar:hover {
+        background: #d5e8dc;
+    }
+
+    .botao-excluir {
+        background: #fdeaea;
+        color: #c62828;
+    }
+
+    .botao-excluir:hover {
+        background: #f9d8d8;
+    }
+
+    .sem-produtos {
+        text-align: center;
+
+        padding: 35px !important;
+
+        color: #718077 !important;
+    }
+
+    .mensagem-flash {
+        padding: 12px 16px;
+
+        border-radius: 10px;
+
+        margin-bottom: 18px;
+
+        background: #e7f5eb;
+
+        color: #17633c;
+
+        font-size: 14px;
+    }
+
+    .cabecalho-produtos {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        gap: 20px;
+    }
+
+    @media (max-width: 700px) {
+
+        .cabecalho-produtos {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .tabela-container {
+            overflow-x: auto;
+        }
+
+        .tabela-produtos {
+            min-width: 750px;
+        }
+
+    }
+
+</style>
+```
+
+</head>
+
+<body>
+
+```
+
+<button class="botao-menu" id="botaoMenu">
+    ☰
+</button>
+
+<aside class="menu-lateral" id="menuLateral">
+
+    <div class="logo-menu">
+
+        <img
+            src="{{ url_for('static', filename='ICBRANCO.png') }}"
+            alt="Logo IC Agrícola"
+        >
+
+        <h2>IC Agrícola</h2>
+
+    </div>
+
+    <nav class="links-menu">
+
+        <a href="{{ url_for('dashboard') }}"
+           class="link-menu">
+            <span>▣</span>
+            Dashboard
+        </a>
+
+        <a href="{{ url_for('produtos') }}"
+           class="link-menu ativo">
+            <span>▤</span>
+            Produtos
+        </a>
+
+        <a href="{{ url_for('categorias') }}" class="link-menu ativo">
+            <span>▥</span>
+            Categorias
+        </a>
+
+        <a href="{{ url_for('entrada') }}"
+           class="link-menu">
+            <span>↙</span>
+            Entrada
+        </a>
+
+        <a href="{{ url_for('saida') }}"
+           class="link-menu">
+            <span>↗</span>
+            Saída
+        </a>
+
+        <a href="{{ url_for('movimentacao') }}"
+           class="link-menu">
+            <span>↔</span>
+            Movimentações
+        </a>
+
+        <a href="{{ url_for('notificacoes') }}"
+           class="link-menu">
+            <span>🕭</span>
+            Notificações
+        </a>
+
+    </nav>
+
+    <div class="perfil-menu">
+
+        <button class="botao-perfil" id="botaoPerfil">
+
+            <div class="avatar-perfil">
+                {{ (session.get('usuario') or 'U')[0]|upper }}
+            </div>
+
+            <div class="dados-perfil">
+
+                <strong>
+                    {{ session.get('usuario', 'Usuário') }}
+                </strong>
+
+                <small>
+                    Meu perfil
+                </small>
+
+            </div>
+
+            <span class="seta-perfil">
+                ⌃
+            </span>
+
+        </button>
+
+        <div class="opcoes-perfil" id="opcoesPerfil">
+
+            <a href="{{ url_for('perfil') }}"
+               class="opcao-perfil">
+                <span>👤</span>
+                Editar perfil
+            </a>
+
+            <button
+                type="button"
+                class="opcao-perfil"
+                id="botaoAcessibilidade">
+                <span>⚙</span>
+                Acessibilidade
+            </button>
+
+            <a href="{{ url_for('logout') }}"
+               class="opcao-perfil sair">
+                <span>↪</span>
+                Sair
+            </a>
+
+        </div>
+
+    </div>
+
+</aside>
+
+<main class="conteudo-principal">
+
+    <header class="cabecalho">
+
+        <div>
+
+            <p class="texto-pequeno">
+                Gerenciamento
+            </p>
+
+            <h1>
+                Produtos
+            </h1>
+
+            <p class="subtitulo">
+                Consulte, cadastre e gerencie os produtos do seu estoque.
+            </p>
+
+        </div>
+
+        
+
+    </header>
+
+    <section class="area-conteudo">
+
+        <div class="cabecalho-secao cabecalho-produtos">
+
+            <div>
+
+                <h2>
+                    Produtos cadastrados
+                </h2>
+
+                <p>
+                    Gerencie as peças e equipamentos disponíveis.
+                </p>
+
+            </div>
+
+            <a
+                href="{{ url_for('cadastrar_produto') }}"
+                class="botao-novo">
+                + Novo produto
+            </a>
+
+        </div>
+
+        
+
+        <div class="tabela-container">
+
+            <table class="tabela-produtos">
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Preço unitário</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for produto in produtos %}
+
+                    <tr>
+
+                        <td>
+                            {{ produto.id }}
+                        </td>
+
+                        <td>
+                            <strong>
+                                {{ produto.nome }}
+                            </strong>
+                        </td>
+
+                        <td>
+                            {{ produto.quantidade }}
+                        </td>
+
+                        <td>
+                            R$
+                            {{ "%.2f"|format(produto.preco_unitario) }}
+                        </td>
+
+                        <td>
+
+                            {% if produto.quantidade <= 10 %}
+
+                                <span class="status baixo">
+                                    Estoque baixo
+                                </span>
+
+                            {% else %}
+
+                                <span class="status normal">
+                                    Normal
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <div class="acoes-produto">
+
+                                <a
+                                    href="{{ url_for('editar_produto', id=produto.id) }}"
+                                    class="botao-editar">
+                                    Editar
+                                </a>
+
+                                <form
+                                    action="{{ url_for('excluir', id=produto.id) }}"
+                                    method="POST"
+                                    onsubmit="return confirm('Tem certeza que deseja excluir este produto?');"
+                                >
+
+                                    <button
+                                        type="submit"
+                                        class="botao-excluir">
+                                        Excluir
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="sem-produtos">
+
+                            Nenhum produto cadastrado.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+<div
+    class="modal-acessibilidade"
+    id="modalAcessibilidade">
+
+    <div class="conteudo-acessibilidade">
+
+        <button
+            class="fechar-acessibilidade"
+            id="fecharAcessibilidade">
+            ×
+        </button>
+
+        <h2>
+            Acessibilidade
+        </h2>
+
+        <p>
+            Personalize a visualização do sistema.
+        </p>
+
+        <div class="opcoes-acessibilidade">
+
+            <button id="aumentarFonte">
+                A+ Aumentar fonte
+            </button>
+
+            <button id="diminuirFonte">
+                A− Diminuir fonte
+            </button>
+
+            <button id="alternarContraste">
+                ◐ Alto contraste
+            </button>
+
+            <button id="destacarLinks">
+                🔗 Destacar links
+            </button>
+
+            <button id="restaurarAcessibilidade">
+                ↺ Restaurar padrão
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    const botaoMenu =
+        document.getElementById("botaoMenu");
+
+    const menuLateral =
+        document.getElementById("menuLateral");
+
+    botaoMenu.addEventListener("click", function () {
+
+        menuLateral.classList.toggle("aberto");
+
+    });
+
+
+    const botaoPerfil =
+        document.getElementById("botaoPerfil");
+
+    const opcoesPerfil =
+        document.getElementById("opcoesPerfil");
+
+    botaoPerfil.addEventListener("click", function () {
+
+        opcoesPerfil.classList.toggle("aberto");
+
+    });
+
+
+    const botaoAcessibilidade =
+        document.getElementById("botaoAcessibilidade");
+
+    const modalAcessibilidade =
+        document.getElementById("modalAcessibilidade");
+
+    const fecharAcessibilidade =
+        document.getElementById("fecharAcessibilidade");
+
+
+    botaoAcessibilidade.addEventListener("click", function () {
+
+        modalAcessibilidade.classList.add("aberto");
+
+    });
+
+
+    fecharAcessibilidade.addEventListener("click", function () {
+
+        modalAcessibilidade.classList.remove("aberto");
+
+    });
+
+
+    document
+        .getElementById("aumentarFonte")
+        .addEventListener("click", function () {
+
+            document.body.classList.add("fonte-grande");
+
+        });
+
+
+    document
+        .getElementById("diminuirFonte")
+        .addEventListener("click", function () {
+
+            document.body.classList.remove("fonte-grande");
+
+        });
+
+
+    document
+        .getElementById("alternarContraste")
+        .addEventListener("click", function () {
+
+            document.body.classList.toggle("alto-contraste");
+
+        });
+
+
+    document
+        .getElementById("destacarLinks")
+        .addEventListener("click", function () {
+
+            document.body.classList.toggle("links-destacados");
+
+        });
+
+
+    document
+        .getElementById("restaurarAcessibilidade")
+        .addEventListener("click", function () {
+
+            document.body.classList.remove(
+                "fonte-grande",
+                "alto-contraste",
+                "links-destacados"
+            );
+
+        });
+
+</script>
+```
+
+</body>
+</html>
