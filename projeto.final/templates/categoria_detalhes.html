@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ categoria.nome }} | IC Agrícola</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='dashboard.css') }}">
+
+    <style>
+        .categoria-info {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+        }
+
+        .categoria-info h2 {
+            color: #173d29;
+            margin: 0 0 8px;
+        }
+
+        .categoria-info p {
+            color: #718078;
+            margin: 0;
+        }
+
+        .tabela-container {
+            overflow-x: auto;
+        }
+
+        .sem-produtos {
+            text-align: center;
+            padding: 35px;
+            color: #718078;
+        }
+
+        .botao-voltar {
+            display: inline-block;
+            padding: 11px 18px;
+            border-radius: 10px;
+            background: #e9efeb;
+            color: #365343;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .botao-voltar:hover {
+            background: #dce8e0;
+        }
+
+        .link-produto {
+            color: #146c43;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .link-produto:hover {
+            text-decoration: underline;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 7px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .status.baixo {
+            background: #fff1f1;
+            color: #b42318;
+        }
+
+        .status.normal {
+            background: #e9f7ef;
+            color: #146c43;
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="botao-menu" id="botaoMenu">☰</button>
+
+    <!-- MENU LATERAL -->
+    <aside class="menu-lateral" id="menuLateral">
+
+        <div class="logo-menu">
+
+            <img src="{{ url_for('static', filename='ICBRANCO.png') }}"
+                 alt="Logo IC Agrícola">
+
+            <h2>IC Agrícola</h2>
+
+        </div>
+
+        <nav class="links-menu">
+
+            <a href="{{ url_for('dashboard') }}" class="link-menu">
+                <span>▣</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('produtos') }}" class="link-menu">
+                <span>▤</span>
+                Produtos
+            </a>
+
+            <a href="{{ url_for('categorias') }}" class="link-menu ativo">
+                <span>▥</span>
+                Categorias
+            </a>
+
+            <a href="{{ url_for('entrada') }}" class="link-menu">
+                <span>↙</span>
+                Entrada
+            </a>
+
+            <a href="{{ url_for('saida') }}" class="link-menu">
+                <span>↗</span>
+                Saída
+            </a>
+
+            <a href="{{ url_for('movimentacao') }}" class="link-menu">
+                <span>↔</span>
+                Movimentações
+            </a>
+
+            <a href="{{ url_for('notificacoes') }}" class="link-menu">
+                <span>🔔</span>
+                Notificações
+            </a>
+
+        </nav>
+
+        <!-- PERFIL -->
+        <div class="perfil-menu">
+
+            <button class="botao-perfil" id="botaoPerfil">
+
+                <div class="avatar-perfil">
+                    {{ (session.get('usuario') or 'U')[0]|upper }}
+                </div>
+
+                <div class="dados-perfil">
+
+                    <strong>
+                        {{ session.get('usuario', 'Usuário') }}
+                    </strong>
+
+                    <small>Meu perfil</small>
+
+                </div>
+
+                <span class="seta-perfil">⌃</span>
+
+            </button>
+
+            <div class="opcoes-perfil" id="opcoesPerfil">
+
+                <a href="{{ url_for('perfil') }}"
+                   class="opcao-perfil">
+
+                    <span>👤</span>
+                    Editar perfil
+
+                </a>
+
+                <button type="button"
+                        class="opcao-perfil"
+                        id="botaoAcessibilidade">
+
+                    <span>⚙</span>
+                    Acessibilidade
+
+                </button>
+
+                <a href="{{ url_for('logout') }}"
+                   class="opcao-perfil sair">
+
+                    <span>↪</span>
+                    Sair
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- CONTEÚDO -->
+    <main class="conteudo-principal">
+
+        <header class="cabecalho">
+
+            <div>
+
+                <p class="texto-pequeno">
+                    Categoria
+                </p>
+
+                <h1>{{ categoria.nome }}</h1>
+
+                <p class="subtitulo">
+                    Produtos pertencentes a esta categoria.
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <section class="area-conteudo">
+
+            <a href="{{ url_for('categorias') }}"
+               class="botao-voltar">
+
+                ← Voltar para categorias
+
+            </a>
+
+
+            <!-- INFORMAÇÕES DA CATEGORIA -->
+            <div class="categoria-info">
+
+                <h2>
+                    {{ categoria.nome }}
+                </h2>
+
+                <p>
+
+                    {% if categoria.descricao %}
+
+                        {{ categoria.descricao }}
+
+                    {% else %}
+
+                        Nenhuma descrição cadastrada.
+
+                    {% endif %}
+
+                </p>
+
+            </div>
+
+
+            <!-- PRODUTOS -->
+            <div class="cabecalho-secao">
+
+                <div>
+
+                    <h2>
+                        Produtos da categoria
+                    </h2>
+
+                    <p>
+                        Produtos cadastrados nesta categoria.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="tabela-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Produto</th>
+                            <th>Quantidade</th>
+                            <th>Preço unitário</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for produto in produtos %}
+
+                        <tr>
+
+                            <td>
+
+                                <a href="{{ url_for('produto_detalhes', id=produto.id) }}"
+                                   class="link-produto">
+
+                                    {{ produto.nome }}
+
+                                </a>
+
+                            </td>
+
+                            <td>
+                                {{ produto.quantidade }}
+                            </td>
+
+                            <td>
+
+                                R$
+                                {{ "%.2f"|format(produto.preco_unitario) }}
+
+                            </td>
+
+                            <td>
+
+                                {% if produto.quantidade <= 10 %}
+
+                                    <span class="status baixo">
+                                        Estoque baixo
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status normal">
+                                        Normal
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="4"
+                                class="sem-produtos">
+
+                                Nenhum produto cadastrado
+                                nesta categoria.
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- MODAL ACESSIBILIDADE -->
+    <div class="modal-acessibilidade"
+         id="modalAcessibilidade">
+
+        <div class="conteudo-acessibilidade">
+
+            <button class="fechar-acessibilidade"
+                    id="fecharAcessibilidade">
+
+                ×
+
+            </button>
+
+            <h2>Acessibilidade</h2>
+
+            <p>
+                Personalize a visualização do sistema.
+            </p>
+
+            <div class="opcoes-acessibilidade">
+
+                <button id="aumentarFonte">
+                    A+ Aumentar fonte
+                </button>
+
+                <button id="diminuirFonte">
+                    A− Diminuir fonte
+                </button>
+
+                <button id="alternarContraste">
+                    ◐ Alto contraste
+                </button>
+
+                <button id="destacarLinks">
+                    🔗 Destacar links
+                </button>
+
+                <button id="restaurarAcessibilidade">
+                    ↺ Restaurar padrão
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* MENU */
+
+        const botaoMenu =
+            document.getElementById("botaoMenu");
+
+        const menuLateral =
+            document.getElementById("menuLateral");
+
+        if (botaoMenu && menuLateral) {
+
+            botaoMenu.addEventListener("click", function () {
+
+                menuLateral.classList.toggle("aberto");
+
+            });
+
+        }
+
+
+        /* PERFIL */
+
+        const botaoPerfil =
+            document.getElementById("botaoPerfil");
+
+        const opcoesPerfil =
+            document.getElementById("opcoesPerfil");
+
+        if (botaoPerfil && opcoesPerfil) {
+
+            botaoPerfil.addEventListener("click", function () {
+
+                opcoesPerfil.classList.toggle("aberto");
+
+            });
+
+        }
+
+
+        /* ACESSIBILIDADE */
+
+        const botaoAcessibilidade =
+            document.getElementById("botaoAcessibilidade");
+
+        const modalAcessibilidade =
+            document.getElementById("modalAcessibilidade");
+
+        const fecharAcessibilidade =
+            document.getElementById("fecharAcessibilidade");
+
+
+        if (botaoAcessibilidade && modalAcessibilidade) {
+
+            botaoAcessibilidade.addEventListener(
+                "click",
+                function () {
+
+                    modalAcessibilidade.classList.add("aberto");
+
+                }
+            );
+
+        }
+
+
+        if (fecharAcessibilidade && modalAcessibilidade) {
+
+            fecharAcessibilidade.addEventListener(
+                "click",
+                function () {
+
+                    modalAcessibilidade.classList.remove("aberto");
+
+                }
+            );
+
+        }
+
+
+        const aumentarFonte =
+            document.getElementById("aumentarFonte");
+
+        if (aumentarFonte) {
+
+            aumentarFonte.addEventListener(
+                "click",
+                function () {
+
+                    document.body.classList.add("fonte-grande");
+
+                }
+            );
+
+        }
+
+
+        const diminuirFonte =
+            document.getElementById("diminuirFonte");
+
+        if (diminuirFonte) {
+
+            diminuirFonte.addEventListener(
+                "click",
+                function () {
+
+                    document.body.classList.remove("fonte-grande");
+
+                }
+            );
+
+        }
+
+
+        const alternarContraste =
+            document.getElementById("alternarContraste");
+
+        if (alternarContraste) {
+
+            alternarContraste.addEventListener(
+                "click",
+                function () {
+
+                    document.body.classList.toggle(
+                        "alto-contraste"
+                    );
+
+                }
+            );
+
+        }
+
+
+        const destacarLinks =
+            document.getElementById("destacarLinks");
+
+        if (destacarLinks) {
+
+            destacarLinks.addEventListener(
+                "click",
+                function () {
+
+                    document.body.classList.toggle(
+                        "links-destacados"
+                    );
+
+                }
+            );
+
+        }
+
+
+        const restaurarAcessibilidade =
+            document.getElementById("restaurarAcessibilidade");
+
+        if (restaurarAcessibilidade) {
+
+            restaurarAcessibilidade.addEventListener(
+                "click",
+                function () {
+
+                    document.body.classList.remove(
+                        "fonte-grande",
+                        "alto-contraste",
+                        "links-destacados"
+                    );
+
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

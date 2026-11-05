@@ -1,0 +1,137 @@
+.acessibilidade-area {
+    position: fixed;
+    top: 20px;
+    right: 150px;
+    z-index: 1000;
+}
+
+.acessibilidade-btn {
+    border: none;
+    background: #0d4d2c;
+    color: white;
+    padding: 12px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.acessibilidade-btn:hover {
+    background: #146c43;
+}
+
+.acessibilidade-btn:focus,
+.acessibilidade-opcoes button:focus,
+.acessibilidade-topo button:focus {
+    outline: 3px solid #ffd54f;
+    outline-offset: 3px;
+}
+
+.painel-acessibilidade {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    width: 280px;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.painel-acessibilidade.aberto {
+    display: block;
+}
+
+.acessibilidade-topo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.acessibilidade-topo h2 {
+    margin: 0;
+    color: #0d4d2c;
+    font-size: 20px;
+}
+
+.acessibilidade-topo button {
+    border: none;
+    background: transparent;
+    color: #333;
+    font-size: 28px;
+    cursor: pointer;
+}
+
+.acessibilidade-opcoes {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.acessibilidade-opcoes button {
+    border: none;
+    background: #0d4d2c;
+    color: white;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-size: 14px;
+}
+
+.acessibilidade-opcoes button:hover {
+    background: #146c43;
+}
+
+body.alto-contraste {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+body.alto-contraste .content,
+body.alto-contraste .card,
+body.alto-contraste .tabela-box,
+body.alto-contraste .form-box,
+body.alto-contraste table,
+body.alto-contraste .painel-acessibilidade {
+    background: #000 !important;
+    color: #fff !important;
+}
+
+body.alto-contraste h1,
+body.alto-contraste h2,
+body.alto-contraste h3,
+body.alto-contraste p,
+body.alto-contraste td,
+body.alto-contraste th {
+    color: #fff !important;
+}
+
+body.alto-contraste a,
+body.alto-contraste button {
+    color: #fff !important;
+}
+
+body.destacar-links a {
+    outline: 3px solid #ffd54f !important;
+    outline-offset: 3px;
+    text-decoration: underline !important;
+}
+
+body.destacar-links button {
+    outline: 3px solid #ffd54f !important;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

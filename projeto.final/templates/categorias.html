@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Categorias | IC Agrícola</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='dashboard.css') }}">
+
+    <style>
+        .categorias-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 22px;
+            margin-top: 25px;
+        }
+
+        .card-categoria {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5eee8;
+            transition: 0.2s;
+        }
+
+        .card-categoria:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.09);
+        }
+
+        .icone-categoria {
+            width: 55px;
+            height: 55px;
+            border-radius: 15px;
+            background: #e5f2ea;
+            color: #0d4d2c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            margin-bottom: 18px;
+        }
+
+        .card-categoria h3 {
+            margin: 0 0 8px;
+            color: #173d29;
+            font-size: 20px;
+        }
+
+        .descricao-categoria {
+            color: #718078;
+            font-size: 14px;
+            min-height: 42px;
+            margin-bottom: 18px;
+        }
+
+        .quantidade-categoria {
+            color: #4f6258;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .botao-categoria {
+            display: inline-block;
+            width: 100%;
+            box-sizing: border-box;
+            text-align: center;
+            padding: 11px;
+            border-radius: 10px;
+            background: #0d4d2c;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+
+        .botao-categoria:hover {
+            background: #146c43;
+        }
+
+        .botao-nova-categoria {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 18px;
+            border-radius: 10px;
+            background: #0d4d2c;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .botao-nova-categoria:hover {
+            background: #146c43;
+        }
+
+        .sem-categorias {
+            background: white;
+            border-radius: 18px;
+            padding: 45px;
+            text-align: center;
+            color: #718078;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .sem-categorias h3 {
+            color: #173d29;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 700px) {
+            .categorias-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    {% include "partials/notificacoes.html" %}
+
+    <button class="botao-menu" id="botaoMenu">☰</button>
+
+
+    <aside class="menu-lateral" id="menuLateral">
+
+        <div class="logo-menu">
+
+            <img src="{{ url_for('static', filename='ICBRANCO.png') }}"
+                 alt="Logo IC Agrícola">
+
+            <h2>IC Agrícola</h2>
+
+        </div>
+
+
+        <nav class="links-menu">
+
+            <a href="{{ url_for('dashboard') }}" class="link-menu">
+                <span>▣</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('produtos') }}" class="link-menu">
+                <span>▤</span>
+                Produtos
+            </a>
+
+            <a href="{{ url_for('categorias') }}" class="link-menu ativo">
+                <span>▥</span>
+                Categorias
+            </a>
+
+            <a href="{{ url_for('entrada') }}" class="link-menu">
+                <span>↙</span>
+                Entrada
+            </a>
+
+            <a href="{{ url_for('saida') }}" class="link-menu">
+                <span>↗</span>
+                Saída
+            </a>
+
+            <a href="{{ url_for('movimentacao') }}" class="link-menu">
+                <span>↔</span>
+                Movimentações
+            </a>
+
+            <a href="{{ url_for('notificacoes') }}" class="link-menu">
+                <span>🕭</span>
+                Notificações
+            </a>
+
+        </nav>
+
+
+        <!-- PERFIL -->
+        <div class="perfil-menu">
+
+            <button class="botao-perfil" id="botaoPerfil">
+
+                <div class="avatar-perfil">
+                    {{ (session.get('usuario') or 'U')[0]|upper }}
+                </div>
+
+                <div class="dados-perfil">
+
+                    <strong>
+                        {{ session.get('usuario', 'Usuário') }}
+                    </strong>
+
+                    <small>Meu perfil</small>
+
+                </div>
+
+                <span class="seta-perfil">⌃</span>
+
+            </button>
+
+
+            <div class="opcoes-perfil" id="opcoesPerfil">
+
+                <a href="{{ url_for('perfil') }}"
+                   class="opcao-perfil">
+
+                    <span>👤</span>
+                    Editar perfil
+
+                </a>
+
+
+                <button type="button"
+                        class="opcao-perfil"
+                        id="botaoAcessibilidade">
+
+                    <span>⚙</span>
+                    Acessibilidade
+
+                </button>
+
+
+                <a href="{{ url_for('logout') }}"
+                   class="opcao-perfil sair">
+
+                    <span>↪</span>
+                    Sair
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="conteudo-principal">
+
+
+        <!-- CABEÇALHO -->
+        <header class="cabecalho">
+
+            <div>
+
+                <p class="texto-pequeno">
+                    Organização do estoque
+                </p>
+
+                <h1>Categorias</h1>
+
+                <p class="subtitulo">
+                    Organize seus produtos por categorias.
+                </p>
+
+            </div>
+
+
+            <div class="data-atual">
+
+                <span>📅</span>
+
+                {{ data_atual if data_atual is defined else '' }}
+
+            </div>
+
+        </header>
+
+
+        <!-- ÁREA DE CATEGORIAS -->
+        <section class="area-conteudo">
+
+
+            <div class="cabecalho-secao">
+
+                <div>
+
+                    <h2>
+                        Categorias cadastradas
+                    </h2>
+
+                    <p>
+                        Visualize e organize os produtos do seu estoque.
+                    </p>
+
+                </div>
+
+
+                <a href="{{ url_for('cadastrar_categoria') }}"
+                   class="botao-nova-categoria">
+
+                    + Nova categoria
+
+                </a>
+
+            </div>
+
+
+            {% if categorias %}
+
+                <div class="categorias-grid">
+
+                    {% for categoria in categorias %}
+
+                        <div class="card-categoria">
+
+                            <div class="icone-categoria">
+                                ▥
+                            </div>
+
+
+                            <h3>
+                                {{ categoria.nome }}
+                            </h3>
+
+
+                            <p class="descricao-categoria">
+
+                                {% if categoria.descricao %}
+                                    {{ categoria.descricao }}
+                                {% else %}
+                                    Nenhuma descrição cadastrada.
+                                {% endif %}
+
+                            </p>
+
+
+                            <p class="quantidade-categoria">
+
+                                📦
+
+                                {% if categoria.total_produtos == 1 %}
+
+                                    1 produto
+
+                                {% else %}
+
+                                    {{ categoria.total_produtos }}
+                                    produtos
+
+                                {% endif %}
+
+                            </p>
+
+
+                            <a href="{{ url_for('categoria_detalhes',
+                                               id=categoria.id) }}"
+                               class="botao-categoria">
+
+                                Ver produtos
+
+                            </a>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+            {% else %}
+
+                <div class="sem-categorias">
+
+                    <div class="icone-categoria"
+                         style="margin: 0 auto 18px;">
+
+                        ▥
+
+                    </div>
+
+                    <h3>
+                        Nenhuma categoria cadastrada
+                    </h3>
+
+                    <p>
+                        Crie sua primeira categoria para começar
+                        a organizar seus produtos.
+                    </p>
+
+                    <br>
+
+                    <a href="{{ url_for('cadastrar_categoria') }}"
+                       class="botao-nova-categoria">
+
+                        + Criar primeira categoria
+
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+
+        </section>
+
+    </main>
+
+
+    <!-- MODAL DE ACESSIBILIDADE -->
+    <div class="modal-acessibilidade"
+         id="modalAcessibilidade">
+
+        <div class="conteudo-acessibilidade">
+
+            <button class="fechar-acessibilidade"
+                    id="fecharAcessibilidade">
+
+                ×
+
+            </button>
+
+
+            <h2>
+                Acessibilidade
+            </h2>
+
+            <p>
+                Personalize a visualização do sistema.
+            </p>
+
+
+            <div class="opcoes-acessibilidade">
+
+                <button id="aumentarFonte">
+                    A+ Aumentar fonte
+                </button>
+
+                <button id="diminuirFonte">
+                    A− Diminuir fonte
+                </button>
+
+                <button id="alternarContraste">
+                    ◐ Alto contraste
+                </button>
+
+                <button id="destacarLinks">
+                    🔗 Destacar links
+                </button>
+
+                <button id="restaurarAcessibilidade">
+                    ↺ Restaurar padrão
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+    <script>
+
+        /* MENU */
+
+        const botaoMenu =
+            document.getElementById("botaoMenu");
+
+        const menuLateral =
+            document.getElementById("menuLateral");
+
+
+        botaoMenu.addEventListener("click", function () {
+
+            menuLateral.classList.toggle("aberto");
+
+        });
+
+
+        /* PERFIL */
+
+        const botaoPerfil =
+            document.getElementById("botaoPerfil");
+
+        const opcoesPerfil =
+            document.getElementById("opcoesPerfil");
+
+
+        botaoPerfil.addEventListener("click", function () {
+
+            opcoesPerfil.classList.toggle("aberto");
+
+        });
+
+
+        /* ACESSIBILIDADE */
+
+        const botaoAcessibilidade =
+            document.getElementById("botaoAcessibilidade");
+
+        const modalAcessibilidade =
+            document.getElementById("modalAcessibilidade");
+
+        const fecharAcessibilidade =
+            document.getElementById("fecharAcessibilidade");
+
+
+        botaoAcessibilidade.addEventListener(
+            "click",
+            function () {
+
+                modalAcessibilidade.classList.add("aberto");
+
+            }
+        );
+
+
+        fecharAcessibilidade.addEventListener(
+            "click",
+            function () {
+
+                modalAcessibilidade.classList.remove("aberto");
+
+            }
+        );
+
+
+        /* AUMENTAR FONTE */
+
+        document.getElementById("aumentarFonte")
+            .addEventListener("click", function () {
+
+                document.body.classList.add(
+                    "fonte-grande"
+                );
+
+            });
+
+
+        /* DIMINUIR FONTE */
+
+        document.getElementById("diminuirFonte")
+            .addEventListener("click", function () {
+
+                document.body.classList.remove(
+                    "fonte-grande"
+                );
+
+            });
+
+
+        /* CONTRASTE */
+
+        document.getElementById("alternarContraste")
+            .addEventListener("click", function () {
+
+                document.body.classList.toggle(
+                    "alto-contraste"
+                );
+
+            });
+
+
+        /* DESTACAR LINKS */
+
+        document.getElementById("destacarLinks")
+            .addEventListener("click", function () {
+
+                document.body.classList.toggle(
+                    "links-destacados"
+                );
+
+            });
+
+
+        /* RESTAURAR */
+
+        document.getElementById(
+            "restaurarAcessibilidade"
+        ).addEventListener("click", function () {
+
+            document.body.classList.remove(
+                "fonte-grande",
+                "alto-contraste",
+                "links-destacados"
+            );
+
+        });
+
+    </script>
+
+</body>
+</html>

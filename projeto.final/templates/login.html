@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Login | IC Agrícola</title>
+
+    <link rel="stylesheet"
+        href="{{ url_for('static', filename='login.css') }}">
+
+</head>
+
+<body>
+
+
+<div class="container">
+
+    <div class="left">
+
+        <h1>INVENTORY CONTROL</h1>
+
+        <h2>BEM VINDO(A)</h2>
+
+        <p>
+            Faça login para acessar o
+            <strong>Inventory Control Agrícola.</strong>
+        </p>
+
+        <a href="{{ url_for('cadastro') }}">
+            <button type="button" class="btn-outline">
+                Criar conta
+            </button>
+        </a>
+
+    </div>
+
+    <div class="right">
+
+        <h2>FAÇA LOGIN</h2>
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% if mensagens %}
+                {% for categoria, mensagem in mensagens %}
+                    <div class="mensagem-{{ categoria }}">
+                        {{ mensagem }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if erro %}
+            <div class="mensagem-erro">
+                {{ erro }}
+            </div>
+        {% endif %}
+
+        <form action="{{ url_for('logar') }}" method="POST">
+
+            <div class="input-box">
+                <i>✉</i>
+
+                <input
+                    type="email"
+                    name="email"
+                    placeholder="E-mail"
+                    required
+                >
+            </div>
+
+            <div class="input-box">
+                <i>🔒</i>
+
+                <input
+                    type="password"
+                    name="senha"
+                    placeholder="Senha"
+                    required
+                >
+            </div>
+
+            <div class="options">
+                <span>
+                    Acesse sua conta
+                </span>
+            </div>
+
+            <button type="submit" class="btn">
+                ENTRAR
+            </button>
+
+        </form>
+
+        <div class="bottom">
+
+            <p>
+                Ainda não possui uma conta?
+            </p>
+
+            <a href="{{ url_for('cadastro') }}">
+                Cadastre-se
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ produto.nome }} | IC Agrícola</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='dashboard.css') }}">
+
+    <style>
+        .produto-card {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.06);
+            max-width: 900px;
+        }
+
+        .produto-cabecalho {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .produto-icone {
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
+            background: #e9f3ed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .produto-cabecalho h1 {
+            margin: 0;
+            color: #173d29;
+        }
+
+        .produto-cabecalho p {
+            margin: 5px 0 0;
+            color: #718078;
+        }
+
+        .informacoes-produto {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .informacao {
+            background: #f3f7f4;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .informacao span {
+            display: block;
+            color: #718078;
+            font-size: 14px;
+            margin-bottom: 7px;
+        }
+
+        .informacao strong {
+            color: #173d29;
+            font-size: 20px;
+        }
+
+        .botao-voltar {
+            display: inline-block;
+            padding: 11px 18px;
+            border-radius: 10px;
+            background: #e9efeb;
+            color: #365343;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .botao-voltar:hover {
+            background: #dce8e0;
+        }
+
+        .status {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 10px 16px;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .status.baixo {
+            background: #fff1f1;
+            color: #b42318;
+        }
+
+        .status.normal {
+            background: #e9f7ef;
+            color: #146c43;
+        }
+
+        @media (max-width: 700px) {
+
+            .informacoes-produto {
+                grid-template-columns: 1fr;
+            }
+
+            .produto-cabecalho {
+                align-items: flex-start;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="botao-menu" id="botaoMenu">☰</button>
+
+    <!-- MENU LATERAL -->
+    <aside class="menu-lateral" id="menuLateral">
+
+        <div class="logo-menu">
+
+            <img src="{{ url_for('static', filename='ICBRANCO.png') }}"
+                 alt="Logo IC Agrícola">
+
+            <h2>IC Agrícola</h2>
+
+        </div>
+
+        <nav class="links-menu">
+
+            <a href="{{ url_for('dashboard') }}" class="link-menu">
+                <span>▣</span>
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('produtos') }}" class="link-menu ativo">
+                <span>▤</span>
+                Produtos
+            </a>
+
+            <a href="{{ url_for('categorias') }}" class="link-menu">
+                <span>▥</span>
+                Categorias
+            </a>
+
+            <a href="{{ url_for('entrada') }}" class="link-menu">
+                <span>↙</span>
+                Entrada
+            </a>
+
+            <a href="{{ url_for('saida') }}" class="link-menu">
+                <span>↗</span>
+                Saída
+            </a>
+
+            <a href="{{ url_for('movimentacao') }}" class="link-menu">
+                <span>↔</span>
+                Movimentações
+            </a>
+
+            <a href="{{ url_for('notificacoes') }}" class="link-menu">
+                <span>🔔</span>
+                Notificações
+            </a>
+
+        </nav>
+
+        <!-- PERFIL -->
+        <div class="perfil-menu">
+
+            <button class="botao-perfil" id="botaoPerfil">
+
+                <div class="avatar-perfil">
+                    {{ (session.get('usuario') or 'U')[0]|upper }}
+                </div>
+
+                <div class="dados-perfil">
+
+                    <strong>
+                        {{ session.get('usuario', 'Usuário') }}
+                    </strong>
+
+                    <small>Meu perfil</small>
+
+                </div>
+
+                <span class="seta-perfil">⌃</span>
+
+            </button>
+
+            <div class="opcoes-perfil" id="opcoesPerfil">
+
+                <a href="{{ url_for('perfil') }}"
+                   class="opcao-perfil">
+
+                    <span>👤</span>
+                    Editar perfil
+
+                </a>
+
+                <button type="button"
+                        class="opcao-perfil"
+                        id="botaoAcessibilidade">
+
+                    <span>⚙</span>
+                    Acessibilidade
+
+                </button>
+
+                <a href="{{ url_for('logout') }}"
+                   class="opcao-perfil sair">
+
+                    <span>↪</span>
+                    Sair
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- CONTEÚDO -->
+    <main class="conteudo-principal">
+
+        <header class="cabecalho">
+
+            <div>
+
+                <p class="texto-pequeno">
+                    Produto
+                </p>
+
+                <h1>{{ produto.nome }}</h1>
+
+                <p class="subtitulo">
+                    Informações detalhadas do produto.
+                </p>
+
+            </div>
+
+        </header>
+
+
+        <section class="area-conteudo">
+
+            <a href="{{ url_for('categorias') }}"
+               class="botao-voltar">
+
+                ← Voltar para categorias
+
+            </a>
+
+
+            <div class="produto-card">
+
+                <div class="produto-cabecalho">
+
+                    <div class="produto-icone">
+                        📦
+                    </div>
+
+                    <div>
+
+                        <h1>{{ produto.nome }}</h1>
+
+                        <p>
+                            Categoria:
+                            {{ produto.categoria_nome or "Sem categoria" }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="informacoes-produto">
+
+                    <div class="informacao">
+
+                        <span>Produto</span>
+
+                        <strong>
+                            {{ produto.nome }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="informacao">
+
+                        <span>Categoria</span>
+
+                        <strong>
+                            {{ produto.categoria_nome or "Sem categoria" }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="informacao">
+
+                        <span>Quantidade em estoque</span>
+
+                        <strong>
+                            {{ produto.quantidade }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="informacao">
+
+                        <span>Preço unitário</span>
+
+                        <strong>
+                            R$ {{ "%.2f"|format(produto.preco_unitario) }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="informacao">
+
+                        <span>Valor total em estoque</span>
+
+                        <strong>
+                            R$ {{ "%.2f"|format(
+                                produto.quantidade * produto.preco_unitario
+                            ) }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                {% if produto.quantidade <= 10 %}
+
+                    <div class="status baixo">
+                        ⚠ Estoque baixo
+                    </div>
+
+                {% else %}
+
+                    <div class="status normal">
+                        ✓ Estoque normal
+                    </div>
+
+                {% endif %}
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        const botaoMenu =
+            document.getElementById("botaoMenu");
+
+        const menuLateral =
+            document.getElementById("menuLateral");
+
+        botaoMenu.addEventListener("click", function () {
+
+            menuLateral.classList.toggle("aberto");
+
+        });
+
+
+        const botaoPerfil =
+            document.getElementById("botaoPerfil");
+
+        const opcoesPerfil =
+            document.getElementById("opcoesPerfil");
+
+        botaoPerfil.addEventListener("click", function () {
+
+            opcoesPerfil.classList.toggle("aberto");
+
+        });
+
+
+        const botaoAcessibilidade =
+            document.getElementById("botaoAcessibilidade");
+
+        const modalAcessibilidade =
+            document.getElementById("modalAcessibilidade");
+
+
+        if (botaoAcessibilidade && modalAcessibilidade) {
+
+            botaoAcessibilidade.addEventListener(
+                "click",
+                function () {
+
+                    modalAcessibilidade.classList.add("aberto");
+
+                }
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>

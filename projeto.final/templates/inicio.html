@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Inventory Control Agrícola</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='inicio.css') }}"
+    >
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo-area">
+
+            <img
+                src="{{ url_for('static', filename='ICBRANCO.png') }}"
+                alt="Logo Inventory Control"
+            >
+
+            <div class="logo">
+                𝐈𝐧𝐯𝐞𝐧𝐭𝐨𝐫𝐲 𝐂𝐨𝐧𝐭𝐫𝐨𝐥
+            </div>
+
+        </div>
+
+        <nav>
+
+            <a href="#">Início</a>
+            <a href="#">Funcionalidades</a>
+            <a href="#">Planos</a>
+            <a href="#">Contato</a>
+
+            <button
+                class="login"
+                onclick="window.location.href='/login'"
+            >
+                Login
+            </button>
+
+        </nav>
+
+    </header>
+
+    <hr>
+
+    <a
+        href="https://wa.me/5599999999999"
+        target="_blank"
+        id="whatsapp_fixo"
+    >
+        <img
+            src="{{ url_for('static', filename='wats.png') }}"
+            alt="WhatsApp"
+        >
+    </a>
+
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <h1>
+                𝐒𝐢𝐬𝐭𝐞𝐦𝐚 𝐈𝐧𝐭𝐞𝐥𝐢𝐠𝐞𝐧𝐭𝐞
+                <br>
+                𝐝𝐞 𝐂𝐨𝐧𝐭𝐫𝐨𝐥𝐞 𝐝𝐞 𝐄𝐬𝐭𝐨𝐪𝐮𝐞
+            </h1>
+
+            <p>
+                𝙶𝚎𝚛𝚎𝚗𝚌𝚒𝚎 𝚙𝚛𝚘𝚍𝚞𝚝𝚘𝚜 𝚊𝚐𝚛𝚒́𝚌𝚘𝚕𝚊𝚜,
+                𝚟𝚎𝚗𝚍𝚊𝚜 𝚎 𝚎𝚜𝚝𝚘𝚚𝚞𝚎 𝚍𝚎 𝚏𝚘𝚛𝚖𝚊
+                𝚜𝚒𝚖𝚙𝚕𝚎𝚜.
+            </p>
+
+            <button
+                class="btn-principal"
+                onclick="window.location.href='/login'"
+            >
+                Começar agora
+            </button>
+
+        </div>
+
+    </section>
+
+    <hr>
+
+    <section class="SobreNos">
+
+        <img
+            src="{{ url_for('static', filename='SobreNos.jpg') }}"
+            alt="Sobre o sistema"
+        >
+
+        <div class="video-lado">
+
+            <video controls autoplay muted loop>
+
+                <source
+                    src="{{ url_for('static', filename='estoque.vd.mp4') }}"
+                    type="video/mp4"
+                >
+
+                Seu navegador não suporta vídeos.
+
+            </video>
+
+        </div>
+
+    </section>
+
+    <section>
+
+        <div class="cards">
+
+            <div class="card">
+
+                <span class="check">✔</span>
+
+                <h3>𝐑𝐞𝐥𝐚𝐭𝐨́𝐫𝐢𝐨 𝐝𝐞 𝐞𝐬𝐭𝐨𝐪𝐮𝐞</h3>
+
+                <p>
+                    Mostra um resumo de todos os produtos, quantidades
+                    disponíveis e movimentações feitas no estoque.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <span class="check">✔</span>
+
+                <h3>𝐀𝐥𝐞𝐫𝐭𝐚 𝐝𝐞 𝐞𝐬𝐭𝐨𝐪𝐮𝐞 𝐛𝐚𝐢𝐱𝐨</h3>
+
+                <p>
+                    O sistema avisa quando a quantidade de um produto
+                    está acabando, evitando ficar sem a peça.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <span class="check">✔</span>
+
+                <h3>𝐂𝐨𝐧𝐭𝐫𝐨𝐥𝐞 𝐝𝐞 𝐞𝐧𝐭𝐫𝐚𝐝𝐚 𝐞 𝐬𝐚𝐢́𝐝𝐚</h3>
+
+                <p>
+                    Registra quando um produto entra no estoque
+                    ou sai, atualizando a quantidade automaticamente.
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <span class="check">✔</span>
+
+                <h3>𝐂𝐚𝐝𝐚𝐬𝐭𝐫𝐨 𝐝𝐞 𝐩𝐫𝐨𝐝𝐮𝐭𝐨𝐬</h3>
+
+                <p>
+                    Permite adicionar peças no sistema com informações
+                    como nome e preço.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="simulador">
+
+        <h2>
+            𝐏𝐚𝐢𝐧𝐞𝐥 𝐝𝐨 𝐒𝐢𝐬𝐭𝐞𝐦𝐚
+            𝐃𝐞𝐦𝐨𝐧𝐬𝐭𝐫𝐚𝐜̧𝐚̃𝐨
+        </h2>
+
+        <div class="dashboard">
+
+            <div class="menu-lateral">
+
+                <h3>𝐌𝐞𝐧𝐮</h3>
+
+                <p>📦 Estoque</p>
+                <p>📊 Relatórios</p>
+                <p>💰 Vendas</p>
+
+            </div>
+
+            <div class="conteudo">
+
+                <h3>𝐏𝐫𝐨𝐝𝐮𝐭𝐨𝐬 𝐞𝐦 𝐄𝐬𝐭𝐨𝐪𝐮𝐞</h3>
+
+                <table>
+
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Status</th>
+                    </tr>
+
+                    <tr>
+                        <td>Filtro de óleo</td>
+                        <td>25</td>
+                        <td class="ok">OK</td>
+                    </tr>
+
+                    <tr>
+                        <td>Correia</td>
+                        <td>5</td>
+                        <td class="baixo">Baixo</td>
+                    </tr>
+
+                    <tr>
+                        <td>Parafuso motor</td>
+                        <td>0</td>
+                        <td class="critico">Crítico</td>
+                    </tr>
+
+                </table>
+
+                <button class="btn-add">
+                    + Adicionar Produto
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <hr>
+
+    <section class="cta">
+
+        <h2>
+            𝐂𝐨𝐦𝐞𝐜𝐞 𝐚 𝐜𝐨𝐧𝐭𝐫𝐨𝐥𝐚𝐫 𝐬𝐞𝐮 𝐞𝐬𝐭𝐨𝐪𝐮𝐞 𝐡𝐨𝐣𝐞!
+        </h2>
+
+        <button
+            class="login"
+            onclick="window.location.href='/login'"
+        >
+            Criar Conta
+        </button>
+
+    </section>
+
+    <footer>
+
+        <div class="footer-container">
+
+            <div class="footer-logo">
+
+                <h3>Inventory Control</h3>
+
+                <p>
+                    Controle de estoque agrícola de forma simples e eficiente.
+                </p>
+
+            </div>
+
+            <div class="footer-contato">
+
+                <h4>Contato</h4>
+
+                <p>Email: ic.agricola@gmail.com</p>
+
+                <p>WhatsApp: (19) 99902-3901</p>
+
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+
+            <p>
+                © 2026 Inventory Control Agrícola
+            </p>
+
+        </div>
+
+    </footer>
+
+    <script>
+
+        const botaoAdicionar = document.querySelector('.btn-add');
+
+        if (botaoAdicionar) {
+            botaoAdicionar.addEventListener('click', () => {
+                alert('Produto adicionado com sucesso!');
+            });
+        }
+
+        const elementos = document.querySelectorAll('.card');
+
+        const observer = new IntersectionObserver((entries) => {
+
+            entries.forEach(entry => {
+
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('ativo');
+                }
+
+            });
+
+        });
+
+        elementos.forEach(elemento => {
+            observer.observe(elemento);
+        });
+
+    </script>
+
+</body>
+</html>
