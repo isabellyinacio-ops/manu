@@ -36,7 +36,7 @@ function TabNavigator({ route }) {
         tabBarShowLabel: false,
 
         tabBarStyle: {
-          backgroundColor: '#0F172A',
+          backgroundColor: '#0c2110',
           borderTopWidth: 0,
           height: 65,
         },
@@ -68,7 +68,7 @@ function TabNavigator({ route }) {
             <Ionicons
               name={iconName}
               size={24}
-              color={focused ? '#3B82F6' : '#94A3B8'}
+              color={focused ? '#3bf67d' : '#94A3B8'}
             />
           );
         },
